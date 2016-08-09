@@ -274,6 +274,9 @@ silex.view.Menu.prototype.onMenuEvent = function(type) {
     case 'insert.container':
       this.controller.insertMenuController.addElement(silex.model.Element.TYPE_CONTAINER);
       break;
+    case 'insert.component':
+      this.controller.insertMenuController.openInsertCompoentDialog();
+      break;
     case 'edit.delete.selection':
       // delete component
       this.controller.editMenuController.removeSelectedElements();

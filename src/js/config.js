@@ -421,6 +421,16 @@ silex.Config.menu = {
         mnemonic: goog.events.KeyCodes.H,
         accelerator: 'h'
       },
+      {
+        label: 'Prodotype components',
+        id: 'insert.component',
+        className: 'menu-item-insert-component',
+        globalKey: goog.events.KeyCodes.K,
+        shortcut: [[goog.events.KeyCodes.K, altKeyModifyer]],
+        tooltip: altKeyDisplay + 'K',
+        mnemonic: goog.events.KeyCodes.K,
+        accelerator: 'k'
+      },
       null,
       {
         label: 'New page',
