@@ -29,7 +29,7 @@ goog.require('silex.view.pane.PaneBase');
 
 
 /**
- * on of Silex Editors class
+ * one of Silex Editors class
  * let user edit style of components
  * @constructor
  * @extends {silex.view.pane.PaneBase}

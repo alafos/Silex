@@ -38,24 +38,6 @@ goog.inherits(silex.controller.InsertMenuController, silex.controller.Controller
 
 
 /**
- * create an element and add it to the stage
- * @param {string} type the desired type for the new element
- * @return {Element} the new element
- */
-silex.controller.InsertMenuController.prototype.addElement = function(type) {
-  this.tracker.trackAction('controller-events', 'request', 'insert.' + type, 0);
-  // undo checkpoint
-  this.undoCheckPoint();
-  var element = null;
-  // create the element and add it to the stage
-  element = this.model.element.createElement(type);
-  this.doAddElement(element);
-  this.tracker.trackAction('controller-events', 'success', 'insert.' + type, 1);
-  return element;
-};
-
-
-/**
  * create a page
  * @param {?function()=} successCbk
  * @param {?function()=} cancelCbk
@@ -83,4 +65,14 @@ silex.controller.InsertMenuController.prototype.createPage = function(successCbk
   }, this));
 };
 
+
+/**
+ * insert a component
+ * TODO: move into ComponentAddDialog
+ */
+silex.controller.InsertMenuController.prototype.openInsertComponentDialog = function() {
+  this.tracker.trackAction('controller-events', 'request', 'insert.component.open', 0);
+  this.view.componentAddDialog.openEditor();
+  this.tracker.trackAction('controller-events', 'success', 'insert.component.open', 1);
+};
 

@@ -259,7 +259,7 @@ silex.view.Menu.prototype.onMenuEvent = function(type) {
     case 'tools.mobile.mode':
       this.controller.toolMenuController.toggleMobileMode();
       break;
-   case 'insert.page':
+    case 'insert.page':
       this.controller.insertMenuController.createPage();
       break;
     case 'insert.text':
@@ -275,7 +275,7 @@ silex.view.Menu.prototype.onMenuEvent = function(type) {
       this.controller.insertMenuController.addElement(silex.model.Element.TYPE_CONTAINER);
       break;
     case 'insert.component':
-      this.controller.insertMenuController.openInsertCompoentDialog();
+      this.controller.insertMenuController.openInsertComponentDialog();
       break;
     case 'edit.delete.selection':
       // delete component

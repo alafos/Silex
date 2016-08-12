@@ -374,6 +374,24 @@ silex.controller.ControllerBase.prototype.getUserInputPageName = function(defaul
 
 
 /**
+ * create an element and add it to the stage
+ * @param {string} type the desired type for the new element
+ * @return {Element} the new element
+ */
+silex.controller.ControllerBase.prototype.addElement = function(type) {
+  this.tracker.trackAction('controller-events', 'request', 'insert.' + type, 0);
+  // undo checkpoint
+  this.undoCheckPoint();
+  var element = null;
+  // create the element and add it to the stage
+  element = this.model.element.createElement(type);
+  this.doAddElement(element);
+  this.tracker.trackAction('controller-events', 'success', 'insert.' + type, 1);
+  return element;
+};
+
+
+/**
  * called after an element has been created
  * add the element to the current page (only if it has not a container which is in a page)
  * redraw the tools and set the element as editable

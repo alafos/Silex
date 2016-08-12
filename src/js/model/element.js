@@ -114,6 +114,14 @@ silex.model.Element.TYPE_HTML = 'html';
  * @const
  * @type {string}
  */
+silex.model.Element.TYPE_COMPONENT = 'component';
+
+
+/**
+ * constant for silex element type
+ * @const
+ * @type {string}
+ */
 silex.model.Element.TYPE_ATTR = 'data-silex-type';
 
 
@@ -131,6 +139,22 @@ silex.model.Element.ELEMENT_CONTENT_CLASS_NAME = 'silex-element-content';
  * @type {string}
  */
 silex.model.Element.LINK_ATTR = 'data-silex-href';
+
+
+/**
+ * constant for the attribute name of the component data
+ * @const
+ * @type {string}
+ */
+silex.model.Element.COMPONENT_DATA_ATTR = 'data-silex-comp-data';
+
+
+/**
+ * constant for the attribute name of the component template name
+ * @const
+ * @type {string}
+ */
+silex.model.Element.TEMPLATE_NAME_ATTR = 'data-silex-comp-template';
 
 
 /**
@@ -631,6 +655,13 @@ silex.model.Element.prototype.createElement = function(type) {
       styleObject['background-color'] = 'rgb(255, 255, 255)';
       break;
 
+    // Component
+    case silex.model.Element.TYPE_COMPONENT:
+      element = this.createComponentElement();
+      // add a default style
+      // styleObject['background-color'] = 'rgb(255, 255, 255)';
+      break;
+
     // Image
     case silex.model.Element.TYPE_IMAGE:
       element = this.createImageElement();
@@ -720,6 +751,26 @@ silex.model.Element.prototype.createHtmlElement = function() {
  * called from createElement
  * @return {Element}
  */
+silex.model.Element.prototype.createComponentElement = function() {
+  // create the element
+  var element = goog.dom.createElement('div');
+  element.setAttribute(silex.model.Element.TYPE_ATTR, silex.model.Element.TYPE_COMPONENT);
+  // create the container for html content
+  var htmlContent = goog.dom.createElement('div');
+  htmlContent.innerHTML = '';
+  goog.dom.appendChild(element, htmlContent);
+  // add a marker to find the inner content afterwards, with getContent
+  goog.dom.classlist.add(htmlContent, silex.model.Element.ELEMENT_CONTENT_CLASS_NAME);
+
+  return element;
+};
+
+
+/**
+ * element creation method for a given type
+ * called from createElement
+ * @return {Element}
+ */
 silex.model.Element.prototype.createImageElement = function() {
   // create the element
   var element = goog.dom.createElement('div');
@@ -752,6 +803,46 @@ silex.model.Element.prototype.setLink = function(element, opt_link) {
  */
 silex.model.Element.prototype.getLink = function(element) {
   return element.getAttribute(silex.model.Element.LINK_ATTR);
+};
+
+
+/**
+ * set/get data of the component
+ * @param  {Element} element
+ * @param  {Object} data  the json data
+ */
+silex.model.Element.prototype.setComponentData = function(element, data) {
+  element.setAttribute(silex.model.Element.COMPONENT_DATA_ATTR, JSON.stringify(data));
+};
+
+
+/**
+ * set/get template name of the component
+ * @param  {Element} element
+ * @param  {string} templateName  template name (@see prodotype)
+ */
+silex.model.Element.prototype.setComponentTemplateName = function(element, templateName) {
+  element.setAttribute(silex.model.Element.TEMPLATE_NAME_ATTR, templateName);
+};
+
+
+/**
+ * set/get data of the component
+ * @param  {Element} element
+ * @return {Object}
+ */
+silex.model.Element.prototype.getComponentData = function(element) {
+  return JSON.parse(element.getAttribute(silex.model.Element.COMPONENT_DATA_ATTR));
+};
+
+
+/**
+ * set/get data of the component
+ * @param  {Element} element
+ * @return {string}
+ */
+silex.model.Element.prototype.getComponentTemplateName = function(element) {
+  return element.getAttribute(silex.model.Element.TEMPLATE_NAME_ATTR);
 };
 
 

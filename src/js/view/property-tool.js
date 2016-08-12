@@ -31,6 +31,7 @@ goog.require('silex.view.pane.GeneralStylePane');
 goog.require('silex.view.pane.PagePane');
 goog.require('silex.view.pane.PropertyPane');
 goog.require('silex.view.pane.StylePane');
+goog.require('silex.view.pane.ComponentPane');
 
 
 
@@ -126,6 +127,13 @@ silex.view.PropertyTool.prototype.stylePane = null;
 
 
 /**
+ * property editor
+ * @see     silex.view.pane.ComponentPane
+ */
+silex.view.PropertyTool.prototype.componentPane = null;
+
+
+/**
  * build the UI
  */
 silex.view.PropertyTool.prototype.buildUi = function() {
@@ -159,6 +167,11 @@ silex.view.PropertyTool.prototype.buildUi = function() {
       goog.dom.getElementByClass('style-editor', this.element),
       this.model, this.controller);
 
+  // prodotype components
+  this.componentPane = new silex.view.pane.ComponentPane(
+      goog.dom.getElementByClass('component-editor', this.element),
+      this.model, this.controller);
+
 };
 
 
@@ -176,6 +189,7 @@ silex.view.PropertyTool.prototype.redraw = function(selectedElements, pageNames,
     this.pagePane.redraw(selectedElements, pageNames, currentPageName);
     this.generalStylePane.redraw(selectedElements, pageNames, currentPageName);
     this.stylePane.redraw(selectedElements, pageNames, currentPageName);
+    this.componentPane.redraw(selectedElements, pageNames, currentPageName);
     this.bgPane.redraw(selectedElements, pageNames, currentPageName);
   });
 };

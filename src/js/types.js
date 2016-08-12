@@ -32,6 +32,7 @@ goog.require('silex.controller.PropertyToolController');
 goog.require('silex.controller.SettingsDialogController');
 goog.require('silex.controller.StageController');
 goog.require('silex.controller.TextEditorController');
+goog.require('silex.controller.ComponentAddDialogController');
 goog.require('silex.controller.ToolMenuController');
 goog.require('silex.controller.ViewMenuController');
 
@@ -123,6 +124,7 @@ silex.types.Controller = function() {
  * @param {silex.controller.CssEditorController} cssEditorController
  * @param {silex.controller.JsEditorController} jsEditorController
  * @param {silex.controller.TextEditorController} textEditorController
+ * @param {silex.controller.ComponentAddDialogController} componentAddDialogController
  */
 silex.types.Controller.prototype.init = function(
     fileMenuController,
@@ -138,7 +140,8 @@ silex.types.Controller.prototype.init = function(
     htmlEditorController,
     cssEditorController,
     jsEditorController,
-    textEditorController)
+    textEditorController,
+    componentAddDialogController)
     {
   /**
    * @type {silex.controller.FileMenuController}
@@ -196,6 +199,10 @@ silex.types.Controller.prototype.init = function(
    * @type {silex.controller.TextEditorController}
    */
   this.textEditorController = textEditorController;
+  /**
+   * @type {silex.controller.ComponentAddDialogController}
+   */
+  this.componentAddDialogController = componentAddDialogController;
 };
 
 
@@ -221,6 +228,7 @@ silex.types.View = function() {
  * @param {silex.view.dialog.CssEditor} cssEditor
  * @param {silex.view.dialog.JsEditor} jsEditor
  * @param {silex.view.dialog.TextEditor} textEditor
+ * @param {silex.view.dialog.ComponentAddDialog} componentAddDialog
  * @param {silex.view.dialog.FileExplorer} fileExplorer
  * @param {silex.view.dialog.SettingsDialog} settingsDialog
  * @param {silex.view.Splitter} propSplitter
@@ -237,6 +245,7 @@ silex.types.View.prototype.init = function(
     cssEditor,
     jsEditor,
     textEditor,
+    componentAddDialog,
     fileExplorer,
     settingsDialog,
     propSplitter,
@@ -281,6 +290,10 @@ silex.types.View.prototype.init = function(
    * @type {silex.view.dialog.TextEditor}
    */
   this.textEditor = textEditor;
+  /**
+   * @type {silex.view.dialog.ComponentAddDialog}
+   */
+  this.componentAddDialog = componentAddDialog;
   /**
    * @type {silex.view.dialog.FileExplorer}
    */

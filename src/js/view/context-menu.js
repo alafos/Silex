@@ -64,6 +64,7 @@ silex.view.ContextMenu.prototype.buildUi = function() {
     this.element.querySelector('.image').addEventListener('click', () => {this.controller.insertMenuController.browseAndAddImage();});
     this.element.querySelector('.container').addEventListener('click', () => {this.controller.insertMenuController.addElement(silex.model.Element.TYPE_CONTAINER)});
     this.element.querySelector('.html').addEventListener('click', () => {this.controller.insertMenuController.addElement(silex.model.Element.TYPE_HTML)});
+    this.element.querySelector('.component').addEventListener('click', () => {this.controller.insertMenuController.openInsertComponentDialog();});
     this.element.querySelector('.delete').addEventListener('click', () => {this.controller.editMenuController.removeSelectedElements();});
     this.element.querySelector('.copy').addEventListener('click', () => {this.controller.editMenuController.copySelection();});
     this.element.querySelector('.paste').addEventListener('click', () => {this.controller.editMenuController.pasteSelection();});

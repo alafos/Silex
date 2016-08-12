@@ -15,6 +15,13 @@
  */
 
 
+function Prodotype() {}
+Prodotype.prototype.componentsDef = {};
+Prodotype.prototype.decorate = function() {};
+Prodotype.prototype.ready = function() {};
+Prodotype.prototype.edit = function() {};
+Prodotype.prototype.reset = function() {};
+
 /**
  * Parse and consume source maps. By Mozilla
  * @see https://github.com/mozilla/source-map/
