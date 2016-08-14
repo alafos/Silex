@@ -832,7 +832,7 @@ silex.model.Element.prototype.setComponentTemplateName = function(element, templ
  * @return {Object}
  */
 silex.model.Element.prototype.getComponentData = function(element) {
-  return JSON.parse(element.getAttribute(silex.model.Element.COMPONENT_DATA_ATTR));
+  return /** @type {Object} */ (JSON.parse(element.getAttribute(silex.model.Element.COMPONENT_DATA_ATTR)));
 };
 
 

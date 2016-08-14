@@ -40,13 +40,9 @@ goog.inherits(silex.controller.ComponentAddDialogController, silex.controller.Co
 
 
 /**
- * @param {string} component type to add
+ * @param {string} type component type or template name to add
  */
 silex.controller.ComponentAddDialogController.prototype.add = function(type) {
-  // update content
-  //this.model.element.setInnerHtml(element, content);
-  this.model
-
   var element = this.addElement(silex.model.Element.TYPE_COMPONENT);
   this.model.element.setComponentData(element, {});
   this.model.element.setComponentTemplateName(element, type);
@@ -58,7 +54,7 @@ silex.controller.ComponentAddDialogController.prototype.add = function(type) {
 
 
 /**
- * @param {Array<element>} selection
+ * @param {Array.<Element>} selection
  */
 silex.controller.ComponentAddDialogController.prototype.edit = function(selection) {
   const element = selection[0];

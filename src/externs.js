@@ -15,17 +15,49 @@
  */
 
 
-function Prodotype() {}
+/**
+ * Prodotype
+ * @see https://github.com/lexoyo/Prodotype
+ * @constructor
+ */
+function Prodotype(container, rootPath) {}
+
+
+/**
+ */
 Prodotype.prototype.componentsDef = {};
-Prodotype.prototype.decorate = function() {};
-Prodotype.prototype.ready = function() {};
-Prodotype.prototype.edit = function() {};
+
+
+/**
+ * @param {string} templateName
+ * @param {Object.<*>} data
+ */
+Prodotype.prototype.decorate = function(templateName, data) {};
+
+
+/**
+ * @param {function()} cbk
+ */
+Prodotype.prototype.ready = function(cbk) {};
+
+
+/**
+ * @param {Object.<*>} data
+ * @param {string} templateName
+ * @param {function(Object, string)} onChange
+ */
+Prodotype.prototype.edit = function(data, templateName, onChange) {};
+
+
+/**
+ *
+ */
 Prodotype.prototype.reset = function() {};
+
 
 /**
  * Parse and consume source maps. By Mozilla
  * @see https://github.com/mozilla/source-map/
- * @type {Object.<*>}
  */
 var sourceMap = {};
 

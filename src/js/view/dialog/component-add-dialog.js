@@ -21,6 +21,13 @@ goog.require('silex.view.dialog.DialogBase');
 
 
 
+/**
+ * @constructor
+ * @extends {silex.view.dialog.DialogBase}
+ * @param {!Element} element
+ * @param {!silex.types.Model} model
+ * @param  {!silex.types.Controller} controller
+ */
 silex.view.dialog.ComponentAddDialog = function(element, model, controller) {
   // call super
   goog.base(this, element, model, controller);
@@ -39,7 +46,7 @@ goog.inherits(silex.view.dialog.ComponentAddDialog, silex.view.dialog.DialogBase
  */
 silex.view.dialog.ComponentAddDialog.prototype.buildUi = function() {
   // call super
-  goog.base(this, 'buildUi', this.element);
+  goog.base(this, 'buildUi');
   this.list.innerHTML = 'loading components';
 };
 
