@@ -35,6 +35,7 @@ silex.view.dialog.ComponentAddDialog = function(element, model, controller) {
   this.visibilityClass = 'component-add-dialog';
 
   this.list = element.querySelector('.list');
+  this.side = element.querySelector('.side');
 };
 
 // inherit from silex.view.dialog.DialogBase
@@ -48,13 +49,14 @@ silex.view.dialog.ComponentAddDialog.prototype.buildUi = function() {
   // call super
   goog.base(this, 'buildUi');
   this.list.innerHTML = 'loading components';
+  this.side.innerHTML = '';
+
   // dock mode
   var dockBtn = goog.dom.getElementByClass('dock-btn', this.element);
   if (dockBtn) {
     goog.events.listen(dockBtn, goog.events.EventType.CLICK, function() {
       silex.view.dialog.AceEditorBase.isDocked = !silex.view.dialog.AceEditorBase.isDocked;
       this.controller.toolMenuController.dockPanel(silex.view.dialog.AceEditorBase.isDocked);
-      this.ace.resize();
     }, false, this);
   }
 };
@@ -68,10 +70,19 @@ silex.view.dialog.ComponentAddDialog.prototype.prodotypeReady = function(prodoty
       <p>${prodotype.componentsDef[name].description}</p>
     `;
     cell.setAttribute('data-comp-name', name);
+    // FIXME: attach event on list, not cell
     cell.onclick = (e) => {
       this.controller.componentAddDialogController.add(cell.getAttribute('data-comp-name'));
-      this.closeEditor();
+      // this.closeEditor();
     };
     this.list.appendChild(cell);
+  }
+  const mock = [{'name':'form123'}, {'name':'button456'}, {'name':'form123form123form123form123form123form123form123'}, {'name':'form123'}, {'name':'button456'}, {'name':'form123'}, {'name':'form123'}, {'name':'button456'}, {'name':'form123'}, {'name':'form123'}, {'name':'button456'}, {'name':'form123'}, {'name':'form123'}, {'name':'button456'}, {'name':'form123'}, {'name':'form123'}, {'name':'button456'}, {'name':'form123'}, {'name':'form123'}, {'name':'button456'}, {'name':'form123'}, {'name':'button456'}];
+  for(let idx in mock) {
+    const comp = mock[idx];
+    const cell = document.createElement('li');
+    cell.innerHTML = `${comp.name}`;
+    cell.setAttribute('data-comp-name', comp.name);
+    this.side.appendChild(cell);
   }
 };

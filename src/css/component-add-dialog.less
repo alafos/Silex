@@ -7,37 +7,81 @@
   background-color: @silexdarkgrey;
   border-color: 1px solid @silexdarkgrey;
   box-shadow: 0px 0px 5px @silexdarkgrey;
-  ul {
-    list-style: none;
-    padding: 0;
+  .body {
     display: flex;
-    flex-wrap: wrap;
-    overflow-y: auto;
+    flex-flow: row;
     bottom: 0;
     top: 57px;
     position: absolute;
     margin: 0;
-    li {
-      margin: 20px;
-      background-color: @silexmediumgrey;
-      border-radius: 5px;
-      cursor: pointer;
-      overflow: hidden;
-      flex: 1 1 auto;
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
       display: flex;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    ul.side {
       flex-flow: column;
-      justify-content: space-between;
-      padding: 20px;
-      width: 150px;
-      height: 150px;
-      max-width: 250px;
-      min-width: 150px;
-      & > * {
-        margin: 0;
+      background-color: white;
+      margin: 20px;
+      color: black;
+      max-width: 240px;
+      min-width: 240px;
+      li:hover {
+        background-color: @silexlightblue;
       }
-      p {
-        flex: 0.5 1 auto;
+      li {
+        padding: 20px;
+        cursor: pointer;
+        text-overflow: ellipsis;
+        min-height: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 200px;
+        font-size: medium;
       }
+    }
+    ul.list {
+      flex: 2 1 auto;
+      flex-wrap: wrap;
+      li {
+        margin: 20px;
+        background-color: @silexmediumgrey;
+        border-radius: 5px;
+        cursor: pointer;
+        overflow: hidden;
+        flex: 1 1 auto;
+        display: flex;
+        flex-flow: column;
+        justify-content: space-between;
+        padding: 20px;
+        width: 150px;
+        height: 150px;
+        max-width: 250px;
+        min-width: 150px;
+        & > * {
+          margin: 0;
+        }
+        p {
+          flex: 0.5 1 auto;
+        }
+      }
+    }
+  }
+}
+.dock-editors .silex-component-add-dialog .body {
+  flex-flow: column;
+  .side {
+    height: 300px;
+    max-width: inherit;
+    min-width: inherit;
+    flex-flow: wrap;
+    li {
+      width: auto;
+      max-width: 160px;
+      text-align: center;
     }
   }
 }
