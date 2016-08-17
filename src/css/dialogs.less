@@ -37,10 +37,10 @@
 */
 .hidden-dialog{
   position: absolute;
-  top: -9999px;
-  left: -9999px;
-  bottom: initial;
-  right: initial;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
 }
 .visible-dialog {
   position: absolute;
@@ -48,6 +48,16 @@
   left: @dialog-margin;
   bottom: @dialog-margin;
   right: @dialog-margin;
+  width: auto;
+  height: auto;
+  opacity: 1;
+}
+.dock-editors .dockable-editor {
+  left: auto;
+  right: 0;
+  top: @menuHeight;
+  bottom: 0;
+  overflow: hidden;
 }
 /* but hide the background with display none */
 .dialogs-background, .settings-background {
@@ -103,7 +113,7 @@
     .visible-background;
   }
 }
-/* dock css editor */
+/* dock editors */
 .dock-editors.settings-editor-opened,
 .dock-editors.text-editor-opened{
   .dialogs-background{
@@ -114,18 +124,11 @@
   .silex-text-editor {
     right: @docked-right-margin;
   }
-  .silex-css-editor .title-bar,
-  .silex-html-editor .title-bar,
-  .silex-js-editor .title-bar {
-    height: 41px;
-  }
   .dialogs-background {
     .hidden-background;
   }
 }
-.dock-editors.css-editor-opened .silex-css-editor,
-.dock-editors.js-editor-opened .silex-js-editor,
-.dock-editors.html-editor-opened .silex-html-editor {
+.dock-editors .dockable-editor {
   left: auto;
   right: 0;
   top: @menuHeight;

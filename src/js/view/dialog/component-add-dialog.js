@@ -48,6 +48,15 @@ silex.view.dialog.ComponentAddDialog.prototype.buildUi = function() {
   // call super
   goog.base(this, 'buildUi');
   this.list.innerHTML = 'loading components';
+  // dock mode
+  var dockBtn = goog.dom.getElementByClass('dock-btn', this.element);
+  if (dockBtn) {
+    goog.events.listen(dockBtn, goog.events.EventType.CLICK, function() {
+      silex.view.dialog.AceEditorBase.isDocked = !silex.view.dialog.AceEditorBase.isDocked;
+      this.controller.toolMenuController.dockPanel(silex.view.dialog.AceEditorBase.isDocked);
+      this.ace.resize();
+    }, false, this);
+  }
 };
 
 

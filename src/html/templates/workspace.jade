@@ -73,7 +73,7 @@
     include ./settings-dialog.jade
 
   // html editor
-  .silex-html-editor.ace-editor-container.notranslate.hidden-dialog
+  .silex-html-editor.dockable-editor.ace-editor-container.notranslate.hidden-dialog
     .title-bar HTML editor
       a.help-icon(href='https://github.com/silexlabs/Silex/issues/199', title='about Silex and HTML', target='_blank') Help
     .ace-editor
@@ -81,7 +81,7 @@
     .close-btn.html-editor-close-btn.buttons
 
   // css editor
-  .silex-css-editor.ace-editor-container.notranslate.hidden-dialog
+  .silex-css-editor.dockable-editor.ace-editor-container.notranslate.hidden-dialog
     .title-bar CSS editor
       a.help-icon(href='https://github.com/silexlabs/Silex/issues/184', title='about Silex and CSS', target='_blank') Help
     .ace-editor
@@ -89,7 +89,7 @@
     .close-btn.css-editor-close-btn.buttons
 
   // js editor
-  .silex-js-editor.ace-editor-container.notranslate.hidden-dialog
+  .silex-js-editor.dockable-editor.ace-editor-container.notranslate.hidden-dialog
     .title-bar JS editor
       a.help-icon(href='https://github.com/silexlabs/Silex/issues/200', title='about Silex and Javascript', target='_blank') Help
     .ace-editor
@@ -103,6 +103,9 @@
     .close-btn.text-editor-close-btn.buttons
 
   // component add dialog
-  .silex-component-add-dialog.notranslate.hidden-dialog
-    .close-btn.component-add-dialog-close-btn.buttons x
+  .silex-component-add-dialog.dockable-editor.ace-editor-container.notranslate.hidden-dialog
+    .title-bar Components
+      a.help-icon(href='https://github.com/lexoyo/Prodotype', title='about Prodotype components', target='_blank') Help
     ul.list
+    .dock-btn.buttons
+    .close-btn.component-add-dialog-close-btn.buttons
