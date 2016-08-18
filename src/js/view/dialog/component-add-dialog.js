@@ -49,7 +49,6 @@ silex.view.dialog.ComponentAddDialog.prototype.buildUi = function() {
   // call super
   goog.base(this, 'buildUi');
   this.list.innerHTML = 'loading components';
-  this.side.innerHTML = '';
 
   // dock mode
   var dockBtn = goog.dom.getElementByClass('dock-btn', this.element);
@@ -63,26 +62,40 @@ silex.view.dialog.ComponentAddDialog.prototype.buildUi = function() {
 
 
 silex.view.dialog.ComponentAddDialog.prototype.prodotypeReady = function(prodotype) {
+  this.prodotype = prodotype;
+  this.redraw();
+}
+
+
+silex.view.dialog.ComponentAddDialog.prototype.redraw = function() {
   this.list.innerHTML = '';
-  for(let name in prodotype.componentsDef) {
+  for(let name in this.prodotype.componentsDef) {
     const cell = document.createElement('li');
     cell.innerHTML = `<h3>${name}</h3>
-      <p>${prodotype.componentsDef[name].description}</p>
+      <p>${this.prodotype.componentsDef[name].description}</p>
     `;
     cell.setAttribute('data-comp-name', name);
     // FIXME: attach event on list, not cell
     cell.onclick = (e) => {
       this.controller.componentAddDialogController.add(cell.getAttribute('data-comp-name'));
-      // this.closeEditor();
     };
     this.list.appendChild(cell);
   }
-  const mock = [{'name':'form123'}, {'name':'button456'}, {'name':'form123form123form123form123form123form123form123'}, {'name':'form123'}, {'name':'button456'}, {'name':'form123'}, {'name':'form123'}, {'name':'button456'}, {'name':'form123'}, {'name':'form123'}, {'name':'button456'}, {'name':'form123'}, {'name':'form123'}, {'name':'button456'}, {'name':'form123'}, {'name':'form123'}, {'name':'button456'}, {'name':'form123'}, {'name':'form123'}, {'name':'button456'}, {'name':'form123'}, {'name':'button456'}];
-  for(let idx in mock) {
-    const comp = mock[idx];
+  const components = this.model.element.getAllComponents().map(el => {
+    const name = this.model.element.getComponentName(el);
+    const templateName = this.model.element.getComponentTemplateName(el);
+    return {
+      'name': name,
+      'templateName': templateName,
+      'displayName': `${name} (${templateName})`,
+    };
+  });
+  console.log('redraw', components);
+  this.side.innerHTML = '';
+  components.forEach(comp => {
     const cell = document.createElement('li');
     cell.innerHTML = `${comp.name}`;
     cell.setAttribute('data-comp-name', comp.name);
     this.side.appendChild(cell);
-  }
+  });
 };

@@ -43,16 +43,23 @@ Prodotype.prototype.ready = function(cbk) {};
 
 /**
  * @param {Object.<*>} data
+ * @param {Array.<*>} list
  * @param {string} templateName
- * @param {function(Object, string)} onChange
+ * @param {Object.<function()>} events
  */
-Prodotype.prototype.edit = function(data, templateName, onChange) {};
+Prodotype.prototype.edit = function(data, list, templateName, events) {};
 
 
 /**
  *
  */
 Prodotype.prototype.reset = function() {};
+
+
+/**
+ * @return {string}
+ */
+Prodotype.prototype.createName = function(type, list) {};
 
 
 /**

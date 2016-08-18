@@ -158,6 +158,14 @@ silex.model.Element.TEMPLATE_NAME_ATTR = 'data-silex-comp-template';
 
 
 /**
+ * constant for the attribute name of the component name
+ * @const
+ * @type {string}
+ */
+silex.model.Element.COMPONENT_NAME_ATTR = 'data-silex-comp-name';
+
+
+/**
  * constant for the class name of selected components
  * @const
  * @type {string}
@@ -767,6 +775,19 @@ silex.model.Element.prototype.createComponentElement = function() {
 
 
 /**
+ * @return {Array.<Element>}
+ */
+silex.model.Element.prototype.getAllComponents = function() {
+  const selector = `[${silex.model.Element.TYPE_ATTR}="${silex.model.Element.TYPE_COMPONENT}"]`;
+  const components = this.model.body.getBodyElement().querySelectorAll(selector);
+  var arr = [];
+  for (let idx=0; idx < components.length; idx++) arr.push(components[idx]);
+  console.log('getAllComponents', selector, components, arr);
+  return arr;
+};
+
+
+/**
  * element creation method for a given type
  * called from createElement
  * @return {Element}
@@ -827,6 +848,16 @@ silex.model.Element.prototype.setComponentTemplateName = function(element, templ
 
 
 /**
+ * set/get name of the component
+ * @param  {Element} element
+ * @param  {string} name  template name (@see prodotype)
+ */
+silex.model.Element.prototype.setComponentName = function(element, name) {
+  element.setAttribute(silex.model.Element.COMPONENT_NAME_ATTR, name);
+};
+
+
+/**
  * set/get data of the component
  * @param  {Element} element
  * @return {Object}
@@ -843,6 +874,16 @@ silex.model.Element.prototype.getComponentData = function(element) {
  */
 silex.model.Element.prototype.getComponentTemplateName = function(element) {
   return element.getAttribute(silex.model.Element.TEMPLATE_NAME_ATTR);
+};
+
+
+/**
+ * set/get data of the component
+ * @param  {Element} element
+ * @return {string}
+ */
+silex.model.Element.prototype.getComponentName = function(element) {
+  return element.getAttribute(silex.model.Element.COMPONENT_NAME_ATTR);
 };
 
 

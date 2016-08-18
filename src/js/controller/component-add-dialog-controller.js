@@ -44,11 +44,21 @@ goog.inherits(silex.controller.ComponentAddDialogController, silex.controller.Co
  */
 silex.controller.ComponentAddDialogController.prototype.add = function(type) {
   var element = this.addElement(silex.model.Element.TYPE_COMPONENT);
-  this.model.element.setComponentData(element, {});
+  var name = this.prodotype.createName(type, this.model.element.getAllComponents().map(el => {
+    return {
+      'name': this.model.element.getComponentName(el),
+    };
+  }));
+  this.model.element.setComponentData(element, {
+    'name': name,
+  });
   this.model.element.setComponentTemplateName(element, type);
+  this.model.element.setComponentName(element, name);
 
-  this.prodotype.decorate(type, {})
-        .then(html => this.model.element.setInnerHtml(element, html));
+  this.prodotype.decorate(type, {
+    'name': name,
+  })
+  .then(html => this.model.element.setInnerHtml(element, html));
 
 };
 
@@ -61,11 +71,27 @@ silex.controller.ComponentAddDialogController.prototype.edit = function(selectio
   if(selection.length === 1
     && this.model.element.getType(element) === silex.model.Element.TYPE_COMPONENT) {
 
-    this.prodotype.edit(this.model.element.getComponentData(element),
+    this.prodotype.edit(
+      this.model.element.getComponentData(element),
+      this.model.element.getAllComponents().map(el => {
+        const name = this.model.element.getComponentName(el);
+        const templateName = this.model.element.getComponentTemplateName(el);
+        return {
+          'name': name,
+          'templateName': templateName,
+          'displayName': `${name} (${templateName})`,
+        };
+      }),
       this.model.element.getComponentTemplateName(element),
-      (newData, html) => {
-        this.model.element.setComponentData(element, newData);
-        this.model.element.setInnerHtml(element, html);
+      {
+        'onChange': (newData, html) => {
+          this.model.element.setComponentData(element, newData);
+          this.model.element.setInnerHtml(element, html);
+        },
+        'onBrowse': (e) => {
+          console.error('TODO');
+          e.preventDefault();
+        }
       });
   }
   else {
