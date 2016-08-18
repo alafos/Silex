@@ -36,11 +36,18 @@ silex.view.dialog.ComponentAddDialog = function(element, model, controller) {
 
   this.list = element.querySelector('.list');
   this.side = element.querySelector('.side');
+
+  this.state = 'add';
 };
 
 // inherit from silex.view.dialog.DialogBase
 goog.inherits(silex.view.dialog.ComponentAddDialog, silex.view.dialog.DialogBase);
 
+
+/**
+ * @type {string} state
+ */
+silex.controller.ComponentAddDialog.prototype.state = 'add'
 
 /**
  * init the menu and UIs
@@ -58,6 +65,19 @@ silex.view.dialog.ComponentAddDialog.prototype.buildUi = function() {
       this.controller.toolMenuController.dockPanel(silex.view.dialog.AceEditorBase.isDocked);
     }, false, this);
   }
+  // tabs
+  this.element.querySelector('.tabs .add').onclick = () => {
+    this.element.classList.add('add');
+    this.element.classList.remove('edit');
+    this.state = 'add';
+    this.redraw();
+  };
+  this.element.querySelector('.tabs .edit').onclick = () => {
+    this.element.classList.add('edit');
+    this.element.classList.remove('add');
+    this.state = 'edit';
+    this.redraw();
+  };
 };
 
 
@@ -68,19 +88,30 @@ silex.view.dialog.ComponentAddDialog.prototype.prodotypeReady = function(prodoty
 
 
 silex.view.dialog.ComponentAddDialog.prototype.redraw = function() {
+  if(!this.prodotype) return;
+  // fill the components add list
   this.list.innerHTML = '';
-  for(let name in this.prodotype.componentsDef) {
-    const cell = document.createElement('li');
-    cell.innerHTML = `<h3>${name}</h3>
-      <p>${this.prodotype.componentsDef[name].description}</p>
-    `;
-    cell.setAttribute('data-comp-name', name);
-    // FIXME: attach event on list, not cell
-    cell.onclick = (e) => {
-      this.controller.componentAddDialogController.add(cell.getAttribute('data-comp-name'));
-    };
-    this.list.appendChild(cell);
+  if(this.state === 'add') {
+    for(let name in this.prodotype.componentsDef) {
+      const cell = document.createElement('li');
+      cell.innerHTML = `<h3>${name}</h3>
+        <p>${this.prodotype.componentsDef[name].description}</p>
+      `;
+      cell.setAttribute('data-comp-name', name);
+      // FIXME: attach event on list, not cell
+      console.error('FIXME: attach event on list, not cell');
+      cell.onclick = (e) => {
+        this.controller.componentAddDialogController.add(cell.getAttribute('data-comp-name'));
+      };
+      this.list.appendChild(cell);
+    }
   }
+  else {
+    this.controller.componentAddDialogController.edit(
+      this.model.body.getSelection().filter(
+        el => this.model.element.getType(el) === silex.model.Element.TYPE_COMPONENT));
+  }
+  // fill the side list
   const components = this.model.element.getAllComponents().map(el => {
     const name = this.model.element.getComponentName(el);
     const templateName = this.model.element.getComponentTemplateName(el);
@@ -90,7 +121,6 @@ silex.view.dialog.ComponentAddDialog.prototype.redraw = function() {
       'displayName': `${name} (${templateName})`,
     };
   });
-  console.log('redraw', components);
   this.side.innerHTML = '';
   components.forEach(comp => {
     const cell = document.createElement('li');

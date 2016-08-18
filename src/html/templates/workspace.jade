@@ -103,11 +103,17 @@
     .close-btn.text-editor-close-btn.buttons
 
   // component add dialog
-  .silex-component-add-dialog.dockable-editor.ace-editor-container.notranslate.hidden-dialog
+  .silex-component-add-dialog.dockable-editor.ace-editor-container.notranslate.hidden-dialog.add
     .title-bar Components
       a.help-icon(href='https://github.com/lexoyo/Prodotype', title='about Prodotype components', target='_blank') Help
     div.body
       ul.side
-      ul.list
+      .middle
+        ul.tabs
+          .add Add
+          .edit Edit
+          .sep
+        ul.list
+        iframe.component-editor
     .dock-btn.buttons
     .close-btn.component-add-dialog-close-btn.buttons

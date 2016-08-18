@@ -30,9 +30,15 @@ goog.require('silex.controller.ControllerBase');
 silex.controller.ComponentAddDialogController = function(model, view) {
   // call super
   silex.controller.ControllerBase.call(this, model, view);
-  var ui = document.body.querySelector('.component-editor');
-  this.prodotype = new Prodotype(ui, './libs/prodotype/components');
-  this.prodotype.ready(() => view.componentAddDialog.prodotypeReady(this.prodotype));
+  const iframe = document.body.querySelector('.component-editor');
+  const ui = iframe.contentDocument.body;
+  const script = iframe.contentDocument.createElement('script');
+  script.src='libs/prodotype/prodotype.js';
+  script.onload = (e) => {
+    this.prodotype = new iframe.contentWindow['Prodotype'](ui, './libs/prodotype/components');
+    this.prodotype.ready(() => this.view.componentAddDialog.prodotypeReady(this.prodotype));
+  }
+  iframe.contentDocument.head.appendChild(script);
 };
 
 // inherit from silex.controller.ControllerBase
@@ -43,8 +49,9 @@ goog.inherits(silex.controller.ComponentAddDialogController, silex.controller.Co
  * @param {string} type component type or template name to add
  */
 silex.controller.ComponentAddDialogController.prototype.add = function(type) {
-  var element = this.addElement(silex.model.Element.TYPE_COMPONENT);
-  var name = this.prodotype.createName(type, this.model.element.getAllComponents().map(el => {
+  if(!this.prodotype) return;
+  const element = this.addElement(silex.model.Element.TYPE_COMPONENT);
+  const name = this.prodotype.createName(type, this.model.element.getAllComponents().map(el => {
     return {
       'name': this.model.element.getComponentName(el),
     };
@@ -67,6 +74,7 @@ silex.controller.ComponentAddDialogController.prototype.add = function(type) {
  * @param {Array.<Element>} selection
  */
 silex.controller.ComponentAddDialogController.prototype.edit = function(selection) {
+  if(!this.prodotype) return;
   const element = selection[0];
   if(selection.length === 1
     && this.model.element.getType(element) === silex.model.Element.TYPE_COMPONENT) {
@@ -89,7 +97,7 @@ silex.controller.ComponentAddDialogController.prototype.edit = function(selectio
           this.model.element.setInnerHtml(element, html);
         },
         'onBrowse': (e) => {
-          console.error('TODO');
+          console.error('TODO: call cloud explorer');
           e.preventDefault();
         }
       });

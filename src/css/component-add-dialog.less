@@ -14,6 +14,7 @@
     top: 57px;
     position: absolute;
     margin: 0;
+    width: 100%;
     ul {
       list-style: none;
       padding: 0;
@@ -24,13 +25,15 @@
     }
     ul.side {
       flex-flow: column;
-      background-color: white;
+      background-color: @silexlightergrey;
+      border: double;
       margin: 20px;
       color: black;
       max-width: 240px;
       min-width: 240px;
       li:hover {
-        background-color: @silexlightblue;
+        background-color: @silexdarkgrey;
+        color: @silexlightergrey;
       }
       li {
         padding: 20px;
@@ -43,31 +46,77 @@
         font-size: medium;
       }
     }
-    ul.list {
+    .middle {
+      display: flex;
+      flex-flow: column;
       flex: 2 1 auto;
-      flex-wrap: wrap;
-      li {
-        margin: 20px;
-        background-color: @silexmediumgrey;
-        border-radius: 5px;
-        cursor: pointer;
-        overflow: hidden;
-        flex: 1 1 auto;
-        display: flex;
-        flex-flow: column;
-        justify-content: space-between;
-        padding: 20px;
-        width: 150px;
-        height: 150px;
-        max-width: 250px;
-        min-width: 150px;
-        & > * {
-          margin: 0;
+      ul.tabs {
+        padding-top: 20px;
+        height: 70px;
+        div {
+          height: 19px;
+          padding: 10px 30px 10px;
+          cursor: pointer;
+          border-top: 1px @silexlightgrey solid;
+          border-left: 1px @silexlightgrey solid;
+          border-right: 1px @silexlightgrey solid;
         }
-        p {
-          flex: 0.5 1 auto;
+        .sep {
+          border-bottom: 1px @silexlightgrey solid;
+          border-top: 1px solid transparent;
+          flex: 1 1 auto;
         }
       }
+      ul.list {
+        flex: 2 1 auto;
+        flex-wrap: wrap;
+        li {
+          margin: 20px;
+          margin-left: 0;
+          cursor: pointer;
+          overflow: hidden;
+          flex: 1 1 auto;
+          display: flex;
+          flex-flow: column;
+          justify-content: space-between;
+          padding: 20px;
+          width: 150px;
+          height: 150px;
+          max-width: 250px;
+          min-width: 150px;
+          transition: background-color .5s cubic-bezier(.22,.61,.36,1), color .5s cubic-bezier(.22,.61,.36,1);
+          &:hover {
+            background-color: @silexlightergrey;
+            color: @silexdarkgrey;
+          }
+          & > * {
+            margin: 0;
+          }
+          p {
+            flex: 0.5 1 auto;
+          }
+        }
+      }
+      iframe.component-editor {
+        flex: 1 1 auto;
+        border: none;
+      }
+    }
+  }
+  &.add {
+    .tabs .edit {
+      border-bottom: 1px @silexlightgrey solid;
+    }
+    iframe.component-editor {
+      display: none;
+    }
+  }
+  &.edit {
+    .tabs .add {
+      border-bottom: 1px @silexlightgrey solid;
+    }
+    ul.list {
+      display: none;
     }
   }
 }
@@ -75,6 +124,7 @@
   flex-flow: column;
   .side {
     height: 300px;
+    min-height: 250px;
     max-width: inherit;
     min-width: inherit;
     flex-flow: wrap;

@@ -778,11 +778,12 @@ silex.model.Element.prototype.createComponentElement = function() {
  * @return {Array.<Element>}
  */
 silex.model.Element.prototype.getAllComponents = function() {
+  // get all elements which are components
   const selector = `[${silex.model.Element.TYPE_ATTR}="${silex.model.Element.TYPE_COMPONENT}"]`;
   const components = this.model.body.getBodyElement().querySelectorAll(selector);
+  // make an array out of it
   var arr = [];
   for (let idx=0; idx < components.length; idx++) arr.push(components[idx]);
-  console.log('getAllComponents', selector, components, arr);
   return arr;
 };
 
