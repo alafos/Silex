@@ -167,7 +167,7 @@ silex.controller.EditMenuController.prototype.pasteSelection = function() {
       // add to the selection
       selection.push(element);
       // reset editable option
-      this.doAddElement(element);
+      this.doAddElement(element, true);
       // add to stage and set the "silex-just-added" css class
       this.model.element.addElement(/** @type {Element} */ (container), element);
     }, this);

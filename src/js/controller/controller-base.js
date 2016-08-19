@@ -376,16 +376,17 @@ silex.controller.ControllerBase.prototype.getUserInputPageName = function(defaul
 /**
  * create an element and add it to the stage
  * @param {string} type the desired type for the new element
+ * @param {?boolean} opt_setSelection set the selection to the new element after creation, default is true
  * @return {Element} the new element
  */
-silex.controller.ControllerBase.prototype.addElement = function(type) {
+silex.controller.ControllerBase.prototype.addElement = function(type, opt_setSelection = true) {
   this.tracker.trackAction('controller-events', 'request', 'insert.' + type, 0);
   // undo checkpoint
   this.undoCheckPoint();
   var element = null;
   // create the element and add it to the stage
   element = this.model.element.createElement(type);
-  this.doAddElement(element);
+  this.doAddElement(element, opt_setSelection === true);
   this.tracker.trackAction('controller-events', 'success', 'insert.' + type, 1);
   return element;
 };
@@ -395,9 +396,10 @@ silex.controller.ControllerBase.prototype.addElement = function(type) {
  * called after an element has been created
  * add the element to the current page (only if it has not a container which is in a page)
  * redraw the tools and set the element as editable
+ * @param {boolean} setSelection set the selection to the new element after creation
  * @param {Element} element the element to add
  */
-silex.controller.ControllerBase.prototype.doAddElement = function(element) {
+silex.controller.ControllerBase.prototype.doAddElement = function(element, setSelection) {
   // only visible on the current page
   var currentPageName = this.model.page.getCurrentPage();
   this.model.page.removeFromAllPages(element);
@@ -405,7 +407,9 @@ silex.controller.ControllerBase.prototype.doAddElement = function(element) {
   // unless one of its parents is in a page already
   this.checkElementVisibility(element);
   // select the component
-  this.model.body.setSelection([element]);
+  if(setSelection) {
+    this.model.body.setSelection([element]);
+  }
   // set element editable
   this.model.body.setEditable(element, true);
 };
@@ -596,6 +600,7 @@ silex.controller.ControllerBase.prototype.fileOperationSuccess = function(opt_me
     this.view.settingsDialog.closeEditor();
     this.view.contextMenu.redraw();
     this.view.breadCrumbs.redraw();
+    this.view.componentAddDialog.redraw();
   }
   if (opt_message) {
     // notify user

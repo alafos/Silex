@@ -47,7 +47,7 @@ goog.inherits(silex.view.dialog.ComponentAddDialog, silex.view.dialog.DialogBase
 /**
  * @type {string} state
  */
-silex.controller.ComponentAddDialog.prototype.state = 'add'
+silex.view.dialog.ComponentAddDialog.prototype.state = 'add'
 
 /**
  * init the menu and UIs
@@ -66,25 +66,46 @@ silex.view.dialog.ComponentAddDialog.prototype.buildUi = function() {
     }, false, this);
   }
   // tabs
-  this.element.querySelector('.tabs .add').onclick = () => {
-    this.element.classList.add('add');
-    this.element.classList.remove('edit');
-    this.state = 'add';
-    this.redraw();
+  this.element.querySelector('.tabs .add').onclick = () => this.openTabAdd();
+  this.element.querySelector('.tabs .edit').onclick = () => this.openTabEdit();
+  // attach event on list, not cell
+  this.list.onclick = (e) => {
+    const cell = goog.dom.getAncestorByClass(e.target, 'cell');
+    if(cell && cell.hasAttribute('data-comp-name')){
+      const type = cell.getAttribute('data-comp-name');
+      this.controller.componentAddDialogController.add(type);
+    }
   };
-  this.element.querySelector('.tabs .edit').onclick = () => {
-    this.element.classList.add('edit');
-    this.element.classList.remove('add');
-    this.state = 'edit';
-    this.redraw();
+  this.side.onclick = (e) => {
+    const cell = goog.dom.getAncestorByClass(e.target, 'cell');
+    if(cell && cell.hasAttribute('data-silex-id')){
+      const id = cell.getAttribute('data-silex-id');
+      const element = this.model.property.getElementBySilexId(id, this.model.file.getContentDocument());
+      this.model.body.setSelection([element]);
+      this.openTabEdit();
+    }
   };
 };
 
 
+silex.view.dialog.ComponentAddDialog.prototype.openTabAdd = function() {
+  this.element.classList.add('add');
+  this.element.classList.remove('edit');
+  this.state = 'add';
+  this.redraw();
+};
+
+silex.view.dialog.ComponentAddDialog.prototype.openTabEdit = function() {
+  this.element.classList.add('edit');
+  this.element.classList.remove('add');
+  this.state = 'edit';
+  this.redraw();
+};
+
 silex.view.dialog.ComponentAddDialog.prototype.prodotypeReady = function(prodotype) {
   this.prodotype = prodotype;
   this.redraw();
-}
+};
 
 
 silex.view.dialog.ComponentAddDialog.prototype.redraw = function() {
@@ -94,15 +115,11 @@ silex.view.dialog.ComponentAddDialog.prototype.redraw = function() {
   if(this.state === 'add') {
     for(let name in this.prodotype.componentsDef) {
       const cell = document.createElement('li');
+      cell.classList.add('cell');
       cell.innerHTML = `<h3>${name}</h3>
         <p>${this.prodotype.componentsDef[name].description}</p>
       `;
       cell.setAttribute('data-comp-name', name);
-      // FIXME: attach event on list, not cell
-      console.error('FIXME: attach event on list, not cell');
-      cell.onclick = (e) => {
-        this.controller.componentAddDialogController.add(cell.getAttribute('data-comp-name'));
-      };
       this.list.appendChild(cell);
     }
   }
@@ -114,17 +131,24 @@ silex.view.dialog.ComponentAddDialog.prototype.redraw = function() {
   // fill the side list
   const components = this.model.element.getAllComponents().map(el => {
     const name = this.model.element.getComponentName(el);
+    const id = this.model.property.getSilexId(el);
     const templateName = this.model.element.getComponentTemplateName(el);
     return {
+      'id': id,
       'name': name,
       'templateName': templateName,
       'displayName': `${name} (${templateName})`,
     };
   });
   this.side.innerHTML = '';
+  const selection = this.model.body.getSelection();
+  const selectionId = this.model.property.getSilexId(selection[0]);
   components.forEach(comp => {
     const cell = document.createElement('li');
+    cell.classList.add('cell');
+    if(comp.id === selectionId) cell.classList.add('selected');
     cell.innerHTML = `${comp.name}`;
+    cell.setAttribute('data-silex-id', comp.id);
     cell.setAttribute('data-comp-name', comp.name);
     this.side.appendChild(cell);
   });

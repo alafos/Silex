@@ -17,6 +17,18 @@ body{
   user-select: none;
   cursor: move;
 }
+
+/* prevent element's content to be clickable */
+.editable-style * {
+  pointer-events: none;
+}
+.editable-style {
+  pointer-events: auto;
+}
+.editable-style .ui-resizable-handle {
+  pointer-events: auto;
+}
+/* */
 /*
   class name for components just after they are added to the stage
   this will be removed from the component as soon as it is dragged

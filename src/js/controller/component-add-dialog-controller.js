@@ -50,7 +50,7 @@ goog.inherits(silex.controller.ComponentAddDialogController, silex.controller.Co
  */
 silex.controller.ComponentAddDialogController.prototype.add = function(type) {
   if(!this.prodotype) return;
-  const element = this.addElement(silex.model.Element.TYPE_COMPONENT);
+  const element = this.addElement(silex.model.Element.TYPE_COMPONENT, false);
   const name = this.prodotype.createName(type, this.model.element.getAllComponents().map(el => {
     return {
       'name': this.model.element.getComponentName(el),
@@ -61,12 +61,12 @@ silex.controller.ComponentAddDialogController.prototype.add = function(type) {
   });
   this.model.element.setComponentTemplateName(element, type);
   this.model.element.setComponentName(element, name);
-
   this.prodotype.decorate(type, {
     'name': name,
   })
   .then(html => this.model.element.setInnerHtml(element, html));
-
+  // select the component
+  this.model.body.setSelection([element]);
 };
 
 
