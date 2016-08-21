@@ -376,17 +376,17 @@ silex.controller.ControllerBase.prototype.getUserInputPageName = function(defaul
 /**
  * create an element and add it to the stage
  * @param {string} type the desired type for the new element
- * @param {?boolean} opt_setSelection set the selection to the new element after creation, default is true
+ * @param {?string=} opt_componentType  the type of component to create (for components only),
  * @return {Element} the new element
  */
-silex.controller.ControllerBase.prototype.addElement = function(type, opt_setSelection = true) {
+silex.controller.ControllerBase.prototype.addElement = function(type, opt_componentType) {
   this.tracker.trackAction('controller-events', 'request', 'insert.' + type, 0);
   // undo checkpoint
   this.undoCheckPoint();
   var element = null;
   // create the element and add it to the stage
-  element = this.model.element.createElement(type);
-  this.doAddElement(element, opt_setSelection === true);
+  element = this.model.element.createElement(type, opt_componentType);
+  this.doAddElement(element);
   this.tracker.trackAction('controller-events', 'success', 'insert.' + type, 1);
   return element;
 };
@@ -396,10 +396,9 @@ silex.controller.ControllerBase.prototype.addElement = function(type, opt_setSel
  * called after an element has been created
  * add the element to the current page (only if it has not a container which is in a page)
  * redraw the tools and set the element as editable
- * @param {boolean} setSelection set the selection to the new element after creation
  * @param {Element} element the element to add
  */
-silex.controller.ControllerBase.prototype.doAddElement = function(element, setSelection) {
+silex.controller.ControllerBase.prototype.doAddElement = function(element) {
   // only visible on the current page
   var currentPageName = this.model.page.getCurrentPage();
   this.model.page.removeFromAllPages(element);
@@ -407,9 +406,7 @@ silex.controller.ControllerBase.prototype.doAddElement = function(element, setSe
   // unless one of its parents is in a page already
   this.checkElementVisibility(element);
   // select the component
-  if(setSelection) {
-    this.model.body.setSelection([element]);
-  }
+  this.model.body.setSelection([element]);
   // set element editable
   this.model.body.setEditable(element, true);
 };
@@ -600,7 +597,7 @@ silex.controller.ControllerBase.prototype.fileOperationSuccess = function(opt_me
     this.view.settingsDialog.closeEditor();
     this.view.contextMenu.redraw();
     this.view.breadCrumbs.redraw();
-    this.view.componentAddDialog.redraw();
+    this.view.componentDialog.redraw();
   }
   if (opt_message) {
     // notify user

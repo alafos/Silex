@@ -68,11 +68,11 @@ silex.controller.InsertMenuController.prototype.createPage = function(successCbk
 
 /**
  * insert a component
- * TODO: move into ComponentAddDialog
+ * TODO: move into ComponentDialog
  */
 silex.controller.InsertMenuController.prototype.openInsertComponentDialog = function() {
   this.tracker.trackAction('controller-events', 'request', 'insert.component.open', 0);
-  this.view.componentAddDialog.openEditor();
+  this.view.componentDialog.openEditor();
   this.tracker.trackAction('controller-events', 'success', 'insert.component.open', 1);
 };
 

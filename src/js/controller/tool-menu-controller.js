@@ -181,13 +181,13 @@ silex.controller.ToolMenuController.prototype.dockPanel = function(dock) {
     this.view.propSplitter.addRight(this.view.cssEditor.element);
     this.view.propSplitter.addRight(this.view.jsEditor.element);
     this.view.propSplitter.addRight(this.view.htmlEditor.element);
-    this.view.propSplitter.addRight(this.view.componentAddDialog.element);
+    this.view.propSplitter.addRight(this.view.componentDialog.element);
   }
   else {
     goog.dom.classlist.remove(document.body, 'dock-editors');
     this.view.propSplitter.remove(this.view.cssEditor.element);
     this.view.propSplitter.remove(this.view.jsEditor.element);
     this.view.propSplitter.remove(this.view.htmlEditor.element);
-    this.view.propSplitter.remove(this.view.componentAddDialog.element);
+    this.view.propSplitter.remove(this.view.componentDialog.element);
   }
 };

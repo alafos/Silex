@@ -22,8 +22,6 @@
 
 goog.provide('silex.App');
 
-goog.require('silex.model.Property');
-goog.require('silex.model.Element');
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
 goog.require('goog.dom.classlist');
@@ -46,6 +44,7 @@ goog.require('silex.controller.ToolMenuController');
 goog.require('silex.controller.ViewMenuController');
 goog.require('silex.model.Body');
 goog.require('silex.model.Element');
+goog.require('silex.model.Component');
 goog.require('silex.model.File');
 goog.require('silex.model.Head');
 goog.require('silex.model.Page');
@@ -75,7 +74,7 @@ goog.require('silex.view.dialog.HtmlEditor');
 goog.require('silex.view.dialog.JsEditor');
 goog.require('silex.view.dialog.SettingsDialog');
 goog.require('silex.view.dialog.TextEditor');
-goog.require('silex.view.dialog.ComponentAddDialog');
+goog.require('silex.view.dialog.ComponentDialog');
 
 
 
@@ -140,7 +139,7 @@ class App {
     this.view.cssEditor.buildUi();
     this.view.jsEditor.buildUi();
     this.view.textEditor.buildUi();
-    this.view.componentAddDialog.buildUi();
+    this.view.componentDialog.buildUi();
     this.view.settingsDialog.buildUi();
     this.view.propertyTool.buildUi();
 
@@ -222,10 +221,10 @@ class App {
     /** @type {silex.view.dialog.TextEditor} */
     var textEditor = new silex.view.dialog.TextEditor(textEditorElement, this.model, this.controller);
 
-    // ComponentAddDialog
-    var componentAddDialogElement = /** @type {!Element} */ (goog.dom.getElementByClass('silex-component-add-dialog'));
-    /** @type {silex.view.dialog.ComponentAddDialog} */
-    var componentAddDialog = new silex.view.dialog.ComponentAddDialog(componentAddDialogElement, this.model, this.controller);
+    // ComponentDialog
+    var componentDialogElement = /** @type {!Element} */ (goog.dom.getElementByClass('silex-component-add-dialog'));
+    /** @type {silex.view.dialog.ComponentDialog} */
+    var componentDialog = new silex.view.dialog.ComponentDialog(componentDialogElement, this.model, this.controller);
 
     // SettingsDialog
     var settingsDialogElement = /** @type {!Element} */ (goog.dom.getElementByClass('silex-settings-dialog'));
@@ -273,7 +272,7 @@ class App {
         cssEditor,
         jsEditor,
         textEditor,
-        componentAddDialog,
+        componentDialog,
         fileExplorer,
         settingsDialog,
         propSplitter,
@@ -294,6 +293,7 @@ class App {
         new silex.model.Body(this.model, this.view),
         new silex.model.Page(this.model, this.view),
         new silex.model.Element(this.model, this.view),
+        new silex.model.Component(this.model, this.view),
         new silex.model.Property(this.model, this.view)
     );
   }
@@ -318,7 +318,7 @@ class App {
         new silex.controller.CssEditorController(this.model, this.view),
         new silex.controller.JsEditorController(this.model, this.view),
         new silex.controller.TextEditorController(this.model, this.view),
-        new silex.controller.ComponentAddDialogController(this.model, this.view)
+        new silex.controller.ComponentDialogController(this.model, this.view)
     );
   }
 };

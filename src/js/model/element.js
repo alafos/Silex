@@ -594,6 +594,8 @@ silex.model.Element.prototype.removeElement = function(element) {
     // useless? Should remove its style? this.model.property.setStyle(element);
     // remove the element
     goog.dom.removeNode(element);
+    // component specific
+    if(this.getType(element)) this.model.component.onComponentRemoved(element)
   }
   else {
     console.error('could not delete', element, 'because it is not in the stage element');
@@ -620,9 +622,10 @@ silex.model.Element.prototype.addElement = function(container, element) {
  * and returns a new component for the element
  * @param  {string} type  the type of the element to create,
  *    see TYPE_* constants of the class @see silex.model.Element
+ * @param {?string=} opt_componentType  the type of component to create (for components only),
  * @return  {Element}   the newly created element
  */
-silex.model.Element.prototype.createElement = function(type) {
+silex.model.Element.prototype.createElement = function(type, opt_componentType) {
   // find the container (main background container or the stage)
   var bodyElement = this.model.body.getBodyElement();
   var container = goog.dom.getElementByClass(silex.view.Stage.BACKGROUND_CLASS_NAME, bodyElement);
@@ -665,7 +668,7 @@ silex.model.Element.prototype.createElement = function(type) {
 
     // Component
     case silex.model.Element.TYPE_COMPONENT:
-      element = this.createComponentElement();
+      element = this.createComponentElement(/** @type {string} */ (opt_componentType));
       // add a default style
       // styleObject['background-color'] = 'rgb(255, 255, 255)';
       break;
@@ -757,9 +760,10 @@ silex.model.Element.prototype.createHtmlElement = function() {
 /**
  * element creation method for a given type
  * called from createElement
+ * @param {string} type type of component
  * @return {Element}
  */
-silex.model.Element.prototype.createComponentElement = function() {
+silex.model.Element.prototype.createComponentElement = function(type) {
   // create the element
   var element = goog.dom.createElement('div');
   element.setAttribute(silex.model.Element.TYPE_ATTR, silex.model.Element.TYPE_COMPONENT);
@@ -769,22 +773,9 @@ silex.model.Element.prototype.createComponentElement = function() {
   goog.dom.appendChild(element, htmlContent);
   // add a marker to find the inner content afterwards, with getContent
   goog.dom.classlist.add(htmlContent, silex.model.Element.ELEMENT_CONTENT_CLASS_NAME);
-
+  // init component specific
+  this.model.component.onComponentAdded(element, type);
   return element;
-};
-
-
-/**
- * @return {Array.<Element>}
- */
-silex.model.Element.prototype.getAllComponents = function() {
-  // get all elements which are components
-  const selector = `[${silex.model.Element.TYPE_ATTR}="${silex.model.Element.TYPE_COMPONENT}"]`;
-  const components = this.model.body.getBodyElement().querySelectorAll(selector);
-  // make an array out of it
-  var arr = [];
-  for (let idx=0; idx < components.length; idx++) arr.push(components[idx]);
-  return arr;
 };
 
 
@@ -825,66 +816,6 @@ silex.model.Element.prototype.setLink = function(element, opt_link) {
  */
 silex.model.Element.prototype.getLink = function(element) {
   return element.getAttribute(silex.model.Element.LINK_ATTR);
-};
-
-
-/**
- * set/get data of the component
- * @param  {Element} element
- * @param  {Object} data  the json data
- */
-silex.model.Element.prototype.setComponentData = function(element, data) {
-  element.setAttribute(silex.model.Element.COMPONENT_DATA_ATTR, JSON.stringify(data));
-};
-
-
-/**
- * set/get template name of the component
- * @param  {Element} element
- * @param  {string} templateName  template name (@see prodotype)
- */
-silex.model.Element.prototype.setComponentTemplateName = function(element, templateName) {
-  element.setAttribute(silex.model.Element.TEMPLATE_NAME_ATTR, templateName);
-};
-
-
-/**
- * set/get name of the component
- * @param  {Element} element
- * @param  {string} name  template name (@see prodotype)
- */
-silex.model.Element.prototype.setComponentName = function(element, name) {
-  element.setAttribute(silex.model.Element.COMPONENT_NAME_ATTR, name);
-};
-
-
-/**
- * set/get data of the component
- * @param  {Element} element
- * @return {Object}
- */
-silex.model.Element.prototype.getComponentData = function(element) {
-  return /** @type {Object} */ (JSON.parse(element.getAttribute(silex.model.Element.COMPONENT_DATA_ATTR)));
-};
-
-
-/**
- * set/get data of the component
- * @param  {Element} element
- * @return {string}
- */
-silex.model.Element.prototype.getComponentTemplateName = function(element) {
-  return element.getAttribute(silex.model.Element.TEMPLATE_NAME_ATTR);
-};
-
-
-/**
- * set/get data of the component
- * @param  {Element} element
- * @return {string}
- */
-silex.model.Element.prototype.getComponentName = function(element) {
-  return element.getAttribute(silex.model.Element.COMPONENT_NAME_ATTR);
 };
 
 

@@ -16,7 +16,7 @@
  */
 
 
-goog.provide('silex.view.dialog.ComponentAddDialog');
+goog.provide('silex.view.dialog.ComponentDialog');
 goog.require('silex.view.dialog.DialogBase');
 
 
@@ -28,7 +28,7 @@ goog.require('silex.view.dialog.DialogBase');
  * @param {!silex.types.Model} model
  * @param  {!silex.types.Controller} controller
  */
-silex.view.dialog.ComponentAddDialog = function(element, model, controller) {
+silex.view.dialog.ComponentDialog = function(element, model, controller) {
   // call super
   goog.base(this, element, model, controller);
   // set the visibility css class
@@ -41,18 +41,18 @@ silex.view.dialog.ComponentAddDialog = function(element, model, controller) {
 };
 
 // inherit from silex.view.dialog.DialogBase
-goog.inherits(silex.view.dialog.ComponentAddDialog, silex.view.dialog.DialogBase);
+goog.inherits(silex.view.dialog.ComponentDialog, silex.view.dialog.DialogBase);
 
 
 /**
  * @type {string} state
  */
-silex.view.dialog.ComponentAddDialog.prototype.state = 'add'
+silex.view.dialog.ComponentDialog.prototype.state = 'add'
 
 /**
  * init the menu and UIs
  */
-silex.view.dialog.ComponentAddDialog.prototype.buildUi = function() {
+silex.view.dialog.ComponentDialog.prototype.buildUi = function() {
   // call super
   goog.base(this, 'buildUi');
   this.list.innerHTML = 'loading components';
@@ -73,7 +73,7 @@ silex.view.dialog.ComponentAddDialog.prototype.buildUi = function() {
     const cell = goog.dom.getAncestorByClass(e.target, 'cell');
     if(cell && cell.hasAttribute('data-comp-name')){
       const type = cell.getAttribute('data-comp-name');
-      this.controller.componentAddDialogController.add(type);
+      this.controller.componentDialogController.addElement(silex.model.Element.TYPE_COMPONENT, type);
     }
   };
   this.side.onclick = (e) => {
@@ -88,51 +88,50 @@ silex.view.dialog.ComponentAddDialog.prototype.buildUi = function() {
 };
 
 
-silex.view.dialog.ComponentAddDialog.prototype.openTabAdd = function() {
+silex.view.dialog.ComponentDialog.prototype.openTabAdd = function() {
   this.element.classList.add('add');
   this.element.classList.remove('edit');
   this.state = 'add';
   this.redraw();
 };
 
-silex.view.dialog.ComponentAddDialog.prototype.openTabEdit = function() {
+silex.view.dialog.ComponentDialog.prototype.openTabEdit = function() {
   this.element.classList.add('edit');
   this.element.classList.remove('add');
   this.state = 'edit';
+  const selection = this.model.body.getSelection();
+  if(!selection[0] || this.model.element.getType(selection[0]) !== silex.model.Element.TYPE_COMPONENT) {
+    const allComponents = this.model.component.getAllComponents();
+    if(allComponents.length > 0) {
+      this.model.body.setSelection([allComponents[0]]);
+    }
+  }
   this.redraw();
 };
 
-silex.view.dialog.ComponentAddDialog.prototype.prodotypeReady = function(prodotype) {
-  this.prodotype = prodotype;
-  this.redraw();
-};
-
-
-silex.view.dialog.ComponentAddDialog.prototype.redraw = function() {
-  if(!this.prodotype) return;
+silex.view.dialog.ComponentDialog.prototype.redraw = function() {
   // fill the components add list
+  const componentsDef = this.model.component.getComponentsDef();
   this.list.innerHTML = '';
   if(this.state === 'add') {
-    for(let name in this.prodotype.componentsDef) {
+    for(let name in componentsDef) {
       const cell = document.createElement('li');
       cell.classList.add('cell');
       cell.innerHTML = `<h3>${name}</h3>
-        <p>${this.prodotype.componentsDef[name].description}</p>
+        <p>${componentsDef[name].description}</p>
       `;
       cell.setAttribute('data-comp-name', name);
       this.list.appendChild(cell);
     }
   }
   else {
-    this.controller.componentAddDialogController.edit(
-      this.model.body.getSelection().filter(
-        el => this.model.element.getType(el) === silex.model.Element.TYPE_COMPONENT));
+    this.controller.componentDialogController.editSelection();
   }
   // fill the side list
-  const components = this.model.element.getAllComponents().map(el => {
-    const name = this.model.element.getComponentName(el);
+  const components = this.model.component.getAllComponents().map(el => {
+    const name = this.model.component.getComponentName(el);
     const id = this.model.property.getSilexId(el);
-    const templateName = this.model.element.getComponentTemplateName(el);
+    const templateName = this.model.component.getComponentTemplateName(el);
     return {
       'id': id,
       'name': name,

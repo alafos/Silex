@@ -32,7 +32,7 @@ goog.require('silex.controller.PropertyToolController');
 goog.require('silex.controller.SettingsDialogController');
 goog.require('silex.controller.StageController');
 goog.require('silex.controller.TextEditorController');
-goog.require('silex.controller.ComponentAddDialogController');
+goog.require('silex.controller.ComponentDialogController');
 goog.require('silex.controller.ToolMenuController');
 goog.require('silex.controller.ViewMenuController');
 
@@ -68,9 +68,10 @@ silex.types.Model = function() {
  * @param {silex.model.Body} body
  * @param {silex.model.Page} page
  * @param {silex.model.Element} element
+ * @param {silex.model.Component} component
  * @param {silex.model.Property} property
  */
-silex.types.Model.prototype.init = function(file, head, body, page, element, property) {
+silex.types.Model.prototype.init = function(file, head, body, page, element, component, property) {
   /**
    * @type {silex.model.File}
    */
@@ -91,6 +92,10 @@ silex.types.Model.prototype.init = function(file, head, body, page, element, pro
    * @type {silex.model.Element}
    */
   this.element = element;
+  /**
+   * @type {silex.model.Component}
+   */
+  this.component = component;
   /**
    * @type {silex.model.Property}
    */
@@ -124,7 +129,7 @@ silex.types.Controller = function() {
  * @param {silex.controller.CssEditorController} cssEditorController
  * @param {silex.controller.JsEditorController} jsEditorController
  * @param {silex.controller.TextEditorController} textEditorController
- * @param {silex.controller.ComponentAddDialogController} componentAddDialogController
+ * @param {silex.controller.ComponentDialogController} componentDialogController
  */
 silex.types.Controller.prototype.init = function(
     fileMenuController,
@@ -141,7 +146,7 @@ silex.types.Controller.prototype.init = function(
     cssEditorController,
     jsEditorController,
     textEditorController,
-    componentAddDialogController)
+    componentDialogController)
     {
   /**
    * @type {silex.controller.FileMenuController}
@@ -200,9 +205,9 @@ silex.types.Controller.prototype.init = function(
    */
   this.textEditorController = textEditorController;
   /**
-   * @type {silex.controller.ComponentAddDialogController}
+   * @type {silex.controller.ComponentDialogController}
    */
-  this.componentAddDialogController = componentAddDialogController;
+  this.componentDialogController = componentDialogController;
 };
 
 
@@ -228,7 +233,7 @@ silex.types.View = function() {
  * @param {silex.view.dialog.CssEditor} cssEditor
  * @param {silex.view.dialog.JsEditor} jsEditor
  * @param {silex.view.dialog.TextEditor} textEditor
- * @param {silex.view.dialog.ComponentAddDialog} componentAddDialog
+ * @param {silex.view.dialog.ComponentDialog} componentDialog
  * @param {silex.view.dialog.FileExplorer} fileExplorer
  * @param {silex.view.dialog.SettingsDialog} settingsDialog
  * @param {silex.view.Splitter} propSplitter
@@ -245,7 +250,7 @@ silex.types.View.prototype.init = function(
     cssEditor,
     jsEditor,
     textEditor,
-    componentAddDialog,
+    componentDialog,
     fileExplorer,
     settingsDialog,
     propSplitter,
@@ -291,9 +296,9 @@ silex.types.View.prototype.init = function(
    */
   this.textEditor = textEditor;
   /**
-   * @type {silex.view.dialog.ComponentAddDialog}
+   * @type {silex.view.dialog.ComponentDialog}
    */
-  this.componentAddDialog = componentAddDialog;
+  this.componentDialog = componentDialog;
   /**
    * @type {silex.view.dialog.FileExplorer}
    */

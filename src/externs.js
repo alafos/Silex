@@ -43,7 +43,7 @@ Prodotype.prototype.ready = function(cbk) {};
 
 /**
  * @param {Object.<*>} data
- * @param {Array.<*>} list
+ * @param {Array.<{name:string, displayName:string, templateName:string}>} list
  * @param {string} templateName
  * @param {Object.<function()>} events
  */
@@ -60,6 +60,21 @@ Prodotype.prototype.reset = function() {};
  * @return {string}
  */
 Prodotype.prototype.createName = function(type, list) {};
+
+
+/**
+ * @param {Array.<Element>} container the element containing the dependencies (scripts and style sheets)
+ * @param {Array.<{templateName:string}>} componentNames the list of all the component names
+ * @return {Array.<Element>} the elements to be added to the site
+ */
+Prodotype.prototype.getMissingDependencies = function(container, componentNames) {};
+
+
+/**
+ * @param {Array.<Element>} dependencyElements depencies, i.e. scripts and style sheets
+ * @param {Array.<{templateName:string}>} componentNames the list of all the component names
+ */
+Prodotype.prototype.getUnusedDependencies = function(dependencyElements, componentNames) {};
 
 
 /**
