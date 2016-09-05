@@ -183,6 +183,41 @@ silex.controller.ControllerBase.prototype.undoReset = function() {
 
 
 /**
+ * browse and notify result, track actions, enable undo/redo
+ * @param  {string} trackActionName
+ * @param  {{mimetypes:Array.<string>}} mimetypes
+ * @param  {function(string, ?blob=)} cbk
+ */
+silex.controller.ControllerBase.prototype.browse = function(trackActionName, mimetypes, cbk) {
+  this.tracker.trackAction(
+      'controller-events', 'request', trackActionName, 0);
+  this.view.fileExplorer.openDialog(
+      goog.bind(function(url, blob) {
+        // undo checkpoint
+        this.undoCheckPoint();
+        // start with /api/...
+        if (url.indexOf('/') !== 0) {
+          url = '/' + url;
+        }
+        // notify the caller
+        cbk(url, blob);
+        // QA
+        this.tracker.trackAction(
+            'controller-events', 'success', trackActionName, 1);
+      }, this),
+      mimetypes,
+      goog.bind(function(error) {
+        silex.utils.Notification.notifyError(
+            'Error: I could not select the publish path. <br /><br />' +
+            (error.message || ''));
+        this.tracker.trackAction(
+            'controller-events', 'error', trackActionName, -1);
+      }, this)
+  );
+};
+
+
+/**
  * open file explorer, choose an image and set it as the background image of the current selection
  */
 silex.controller.ControllerBase.prototype.browseBgImage = function() {

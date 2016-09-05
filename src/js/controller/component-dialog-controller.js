@@ -31,7 +31,7 @@ silex.controller.ComponentDialogController = function(model, view) {
   // call super
   silex.controller.ControllerBase.call(this, model, view);
   // init
-  const iframe = document.body.querySelector('.component-editor');
+  const iframe = /** @type {HTMLIFrameElement} */ (document.body.querySelector('.component-editor'));
   this.model.component.initComponents(iframe);
 };
 
@@ -50,13 +50,26 @@ silex.controller.ComponentDialogController.prototype.editSelection = function() 
     this.model.component.edit(
       element,
       {
-      'onChange': (newData, html) => {
-        this.model.element.setComponentData(element, newData);
-        this.model.element.setInnerHtml(element, html);
-      },
-      'onBrowse': (e) => {
-        console.error('TODO: call cloud explorer');
-        e.preventDefault();
+        'onChange': (newData, html) => {
+          this.model.element.setComponentData(element, newData);
+          this.model.element.setInnerHtml(element, html);
+        },
+        'onBrowse': (e, cbk) => {
+          console.error('TODO: call cloud explorer');
+          e.preventDefault();
+            this.browse(
+              'publish.browse',
+              '', // TODO: tracking
+              (url, blob) => {
+                cbk([{
+                  'url': blob.url,
+                  'lastModified': blob.lastModified, // not in blob?
+                  'lastModifiedDate': blob.lastModifiedDate, // not in blob?
+                  'name': blob.filename,
+                  'size': blob.size,
+                  'type': blob.type, // not in blob?
+                }]);
+              });
       }
     });
   }

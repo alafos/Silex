@@ -42,8 +42,7 @@ silex.model.Component = function(model, view) {
 
 /**
  * load the Prodotype library
- * @param {IFrameElement} iframe into which to load the UI
- * @param {function()} cbk
+ * @param {HTMLIFrameElement} iframe into which to load the UI
  */
 silex.model.Component.prototype.initComponents = function(iframe) {
   const ui = iframe.contentDocument.body;
@@ -77,16 +76,16 @@ silex.model.Component.prototype.onComponentRemoved = function(element) {
  * @param {string} type type of component
  */
 silex.model.Component.prototype.onComponentAdded = function(element, type) {
-  const name = this.prodotype.createName(type, this.model.element.getAllComponents().map(el => {
+  const name = this.prodotype.createName(type, this.getAllComponents().map(el => {
     return {
-      'name': this.model.element.getComponentName(el),
+      'name': this.getComponentName(el),
     };
   }));
-  this.model.element.setComponentData(element, {
+  this.setComponentData(element, {
     'name': name,
   });
-  this.model.element.setComponentTemplateName(element, type);
-  this.model.element.setComponentName(element, name);
+  this.setComponentTemplateName(element, type);
+  this.setComponentName(element, name);
   this.prodotype.decorate(type, {
     'name': name,
   })
@@ -182,9 +181,12 @@ silex.model.Component.prototype.updateDepenedencies = function() {
       'templateName': this.getComponentTemplateName(el),
     };
   });
-  // removed unused dependencies (scripts and style sheets)
+  // remove unused dependencies (scripts and style sheets)
+  const nodeList = this.model.head.getHeadElement().querySelectorAll('[data-dependency]');
+  const elements = [];
+  for(let idx=0; idx<nodeList.length; idx++) elements.push(nodeList[idx]);
   const unused = this.prodotype.getUnusedDependencies(
-    this.model.head.getHeadElement().querySelectorAll('[data-dependency]'),
+    elements,
     components
   );
   for(let idx=0; idx < unused.length; idx++) {
@@ -218,17 +220,17 @@ silex.model.Component.prototype.resetSelection = function() {
 silex.model.Component.prototype.edit = function(element, events) {
   if(element && this.prodotype) {
     this.prodotype.edit(
-      this.model.element.getComponentData(element),
-      this.model.element.getAllComponents().map(el => {
-        const name = this.model.element.getComponentName(el);
-        const templateName = this.model.element.getComponentTemplateName(el);
+      this.getComponentData(element),
+      this.getAllComponents().map(el => {
+        const name = this.getComponentName(el);
+        const templateName = this.getComponentTemplateName(el);
         return {
           'name': name,
           'templateName': templateName,
           'displayName': `${name} (${templateName})`,
         };
       }),
-      this.model.element.getComponentTemplateName(element),
+      this.getComponentTemplateName(element),
       events
     );
   }

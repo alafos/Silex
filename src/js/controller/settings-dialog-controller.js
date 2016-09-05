@@ -38,41 +38,6 @@ goog.inherits(silex.controller.SettingsDialogController,
 
 
 /**
- * browse and notify result, track actions, enable undo/redo
- * @param  {string} trackActionName
- * @param  {{mimetypes:Array.<string>}} mimetypes
- * @param  {function(string)} cbk
- */
-silex.controller.SettingsDialogController.prototype.browse = function(trackActionName, mimetypes, cbk) {
-  this.tracker.trackAction(
-      'controller-events', 'request', trackActionName, 0);
-  this.view.fileExplorer.openDialog(
-      goog.bind(function(url) {
-        // undo checkpoint
-        this.undoCheckPoint();
-        // start with /api/...
-        if (url.indexOf('/') !== 0) {
-          url = '/' + url;
-        }
-        // notify the caller
-        cbk(url);
-        // QA
-        this.tracker.trackAction(
-            'controller-events', 'success', trackActionName, 1);
-      }, this),
-      mimetypes,
-      goog.bind(function(error) {
-        silex.utils.Notification.notifyError(
-            'Error: I could not select the publish path. <br /><br />' +
-            (error.message || ''));
-        this.tracker.trackAction(
-            'controller-events', 'error', trackActionName, -1);
-      }, this)
-  );
-};
-
-
-/**
  * the user clicked "browse" button in the publish settings panel
  */
 silex.controller.SettingsDialogController.prototype.browsePublishPath = function() {
